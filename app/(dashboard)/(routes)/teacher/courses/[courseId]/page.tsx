@@ -8,7 +8,7 @@ import { TitleForm } from "./_components/title-form";
 import DescriptionForm from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
 import CategoryForm from "./_components/category-form";
-import { ChaptersForm } from "./_components/chapters-form";
+import { AttachmentForm } from "./_components/attachment-form";
 import { PriceForm } from "./_components/price-form";
 
 const Course = async ({ params }: { params: { courseId: string } }) => {
@@ -23,6 +23,13 @@ const Course = async ({ params }: { params: { courseId: string } }) => {
       id: params.courseId,
       userId,
     },
+    include:{
+      attachments: {
+        orderBy:{
+          createdAt: "desc"
+        }
+      }
+    }
   });
 
   const categories = await db.category.findMany({
@@ -97,6 +104,8 @@ const Course = async ({ params }: { params: { courseId: string } }) => {
               <IconBadge icon={File} />
               <h2 className="text-xl">Resources & Attachments</h2>
             </div>
+
+            <AttachmentForm initialData={course} courseId={course.id} />
           </div>
         </div>
       </div>
